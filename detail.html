@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Solicitud - CliniStock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="panel-container" id="detail-container">
+        <p>Cargando detalles de la solicitud...</p>
+    </div>
+
+    <script>
+        const API_URL = 'https://clinistock-final.onrender.com';
+
+        // Obtenemos el ID de la solicitud desde la URL
+        const params = new URLSearchParams(window.location.search);
+        const solicitudId = params.get('id');
+
+        async function cargarDetalle() {
+            const container = document.getElementById('detail-container');
+            if (!solicitudId) {
+                container.innerHTML = '<h1>Error</h1><p>No se especificó un ID de solicitud.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/solicitud/${solicitudId}`);
+                const detalle = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(detalle.error || 'Error desconocido');
+                }
+
+                // Construimos el HTML con los detalles de la solicitud
+                container.innerHTML = `
+                    <header>
+                        <h1>Detalle de la Solicitud #${detalle.id}</h1>
+                        <a href="dashboard.html" class="header-link">Volver al Panel</a>
+                    </header>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <strong>Insumo:</strong>
+                            <p>${detalle.insumo_descripcion}</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Cantidad Solicitada:</strong>
+                            <p>${detalle.cantidad_solicitada}</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Urgencia:</strong>
+                            <p>${detalle.tipo_urgencia}</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Solicitado por:</strong>
+                            <p>${detalle.usuario_nombre}</p>
+                        </div>
+                        <div class="detail-item">
+                            <strong>Fecha de Solicitud:</strong>
+                            <p>${new Date(detalle.fecha_solicitud).toLocaleString()}</p>
+                        </div>
+                         <div class="detail-item">
+                            <strong>Estado Actual:</strong>
+                            <p>${detalle.estado}</p>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="management-section">
+                        <h2>Gestionar Solicitud</h2>
+                        <p>Próximamente aquí podrás cambiar el estado y añadir notas.</p>
+                    </div>
+                `;
+
+            } catch (error) {
+                console.error('Error:', error);
+                container.innerHTML = `<h1>Error</h1><p>${error.message}</p>`;
+            }
+        }
+
+        window.onload = cargarDetalle;
+    </script>
+</body>
+</html>
