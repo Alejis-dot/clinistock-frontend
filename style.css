@@ -1,11 +1,11 @@
+/* Hoja de Estilos Principal */
+
+/* Estilos Generales y de Login */
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     background-color: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
     margin: 0;
+    color: #333;
 }
 .login-container {
     background-color: #ffffff;
@@ -14,6 +14,7 @@ body {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     width: 320px;
     text-align: center;
+    margin: 10% auto;
 }
 .logo {
     max-width: 150px;
@@ -30,7 +31,6 @@ h2 {
 label {
     display: block;
     margin-bottom: 5px;
-    color: #555;
     font-weight: 500;
 }
 input[type="text"],
@@ -62,4 +62,59 @@ button:hover {
     border: 1px solid #f5c6cb;
     border-radius: 4px;
     margin-bottom: 15px;
+}
+
+/* Estilos del Panel de Control */
+.panel-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-width: 950px;
+    margin: 40px auto;
+    padding: 30px;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+header .header-link {
+    padding: 10px 15px;
+    border-radius: 4px;
+    background-color: #0d6efd;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+header .header-link:hover {
+    background-color: #0b5ed7;
+}
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+.solicitudes-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+.solicitudes-tabla th, .solicitudes-tabla td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+.solicitudes-tabla th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+.solicitudes-tabla tr.urgente {
+    background-color: #fff0f1;
+    font-weight: 500;
+}
+.solicitudes-tabla tr:last-child td {
+    border-bottom: none;
 }
