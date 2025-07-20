@@ -26,20 +26,13 @@
     </div>
 
     <script>
-        // La dirección de nuestra API en Render
         const API_URL = 'https://clinistock-final.onrender.com';
 
-        // Función para cargar las solicitudes pendientes
         async function cargarSolicitudes() {
             try {
                 const response = await fetch(API_URL + '/solicitudes-pendientes');
-                if (!response.ok) {
-                    throw new Error('No se pudieron cargar las solicitudes.');
-                }
                 const solicitudes = await response.json();
                 const tbody = document.getElementById('solicitudes-body');
-
-                // Limpiar la tabla antes de añadir nuevas filas
                 tbody.innerHTML = ''; 
 
                 if (solicitudes.length === 0) {
@@ -47,6 +40,10 @@
                 } else {
                     solicitudes.forEach(solicitud => {
                         const tr = document.createElement('tr');
+                        // Añadimos un evento onclick para redirigir
+                        tr.onclick = () => { window.location.href = `detail.html?id=${solicitud.id}`; };
+                        tr.style.cursor = 'pointer'; // Cambia el cursor para indicar que es clickeable
+                        
                         if (solicitud.tipo_urgencia === 'Urgente') {
                             tr.classList.add('urgente');
                         }
@@ -64,8 +61,6 @@
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Error al cargar los datos.</td></tr>';
             }
         }
-
-        // Llamar a la función cuando la página se cargue
         window.onload = cargarSolicitudes;
     </script>
 </body>
