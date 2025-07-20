@@ -7,62 +7,35 @@
 </head>
 <body>
     <div class="login-container">
-        <img src="logo.png" alt="Logo de la Clínica" class="logo">
-        <h2>Iniciar Sesión</h2>
-        
         <div id="error-message" class="flash error" style="display: none;"></div>
-
         <form id="login-form">
-            <div class="input-group">
-                <label for="username">Nombre de Usuario</label>
-                <input type="text" id="username" name="username" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Contraseña</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Ingresar</button>
-        </form>
+            </form>
     </div>
 
     <script>
-        // La dirección de nuestra API en Render
         const API_URL = 'https://clinistock-final.onrender.com';
-
         const loginForm = document.getElementById('login-form');
-        const errorMessageDiv = document.getElementById('error-message');
+        // ... (el resto del script hasta el fetch) ...
 
         loginForm.addEventListener('submit', async function(event) {
-            event.preventDefault(); // Evita que la página se recargue
-
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-
+            // ... (previene el default, obtiene username y password) ...
             try {
                 const response = await fetch(API_URL + '/login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ username: username, password: password })
+                    // ... (method, headers, body) ...
                 });
-
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    // Si el login es exitoso, guardamos una señal en el navegador
-                    // y redirigimos al panel de control.
+                    // --- ESTA ES LA PARTE NUEVA ---
+                    // Guardamos el ID del usuario además de la señal de login
                     localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userId', data.userId); 
                     window.location.href = 'dashboard.html';
                 } else {
-                    // Si falla, mostramos el mensaje de error de la API
-                    errorMessageDiv.textContent = data.message || 'Error desconocido.';
-                    errorMessageDiv.style.display = 'block';
+                    // ... (manejo de error) ...
                 }
             } catch (error) {
-                // Si hay un error de red
-                errorMessageDiv.textContent = 'No se pudo conectar con el servidor.';
-                errorMessageDiv.style.display = 'block';
+                // ... (manejo de error) ...
             }
         });
     </script>
