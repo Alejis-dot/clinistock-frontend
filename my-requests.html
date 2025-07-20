@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mis Solicitudes - CliniStock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="panel-container">
+        <header>
+            <h1>Mis Solicitudes</h1>
+            <a href="dashboard.html" class="header-link">Volver al Panel</a>
+        </header>
+        
+        <table class="solicitudes-tabla">
+            <thead>
+                <tr>
+                    <th>Insumo</th>
+                    <th>Cantidad</th>
+                    <th>Fecha</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody id="my-requests-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_URL = 'https://clinistock-final.onrender.com';
+        const userId = localStorage.getItem('userId');
+
+        async function cargarMisSolicitudes() {
+            const tbody = document.getElementById('my-requests-body');
+            if (!userId) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Error: No se encontró el ID de usuario. Por favor, inicie sesión de nuevo.</td></tr>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/mis-solicitudes/${userId}`);
+                const solicitudes = await response.json();
+                
+                tbody.innerHTML = ''; 
+
+                if (solicitudes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No has realizado ninguna solicitud.</td></tr>';
+                } else {
+                    solicitudes.forEach(solicitud => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${solicitud.descripcion}</td>
+                            <td>${solicitud.cantidad_solicitada}</td>
+                            <td>${new Date(solicitud.fecha_solicitud).toLocaleDateString()}</td>
+                            <td><span class="status-badge status-${solicitud.estado.toLowerCase()}">${solicitud.estado}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                // ... (manejo de error) ...
+            }
+        }
+        window.onload = cargarMisSolicitudes;
+    </script>
+</body>
+</html>
