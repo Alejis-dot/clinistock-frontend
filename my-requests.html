@@ -58,7 +58,8 @@
                     });
                 }
             } catch (error) {
-                // ... (manejo de error) ...
+                console.error('Error:', error);
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">Error al cargar las solicitudes.</td></tr>';
             }
         }
         window.onload = cargarMisSolicitudes;
