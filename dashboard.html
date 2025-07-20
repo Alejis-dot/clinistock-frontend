@@ -9,7 +9,10 @@
     <div class="panel-container">
         <header>
             <h1>Panel de Solicitudes Pendientes</h1>
-            <a href="solicitar.html" class="header-link">Nueva Solicitud</a>
+            <div>
+                <a href="my-requests.html" class="header-link" style="margin-right: 10px;">Mis Solicitudes</a>
+                <a href="solicitar.html" class="header-link">Nueva Solicitud</a>
+            </div>
         </header>
         
         <table class="solicitudes-tabla">
@@ -40,9 +43,8 @@
                 } else {
                     solicitudes.forEach(solicitud => {
                         const tr = document.createElement('tr');
-                        // Añadimos un evento onclick para redirigir
                         tr.onclick = () => { window.location.href = `detail.html?id=${solicitud.id}`; };
-                        tr.style.cursor = 'pointer'; // Cambia el cursor para indicar que es clickeable
+                        tr.style.cursor = 'pointer';
                         
                         if (solicitud.tipo_urgencia === 'Urgente') {
                             tr.classList.add('urgente');
