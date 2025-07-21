@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Administrar Inventario - CliniStock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="panel-container">
+        <header>
+            <h1>Administrar Inventario</h1>
+            <div>
+                <a href="dashboard.html" class="header-link">Volver al Panel</a>
+            </div>
+        </header>
+        
+        <table class="solicitudes-tabla">
+            <thead>
+                <tr>
+                    <th>Código Interno</th>
+                    <th>Descripción del Insumo</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="inventory-body">
+                </tbody>
+        </table>
+    </div>
+
+    <script>
+        const API_URL = 'https://clinistock-final.onrender.com';
+
+        async function cargarInventario() {
+            const tbody = document.getElementById('inventory-body');
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Cargando inventario...</td></tr>';
+            try {
+                const response = await fetch(API_URL + '/insumos');
+                const inventario = await response.json();
+                
+                tbody.innerHTML = ''; 
+
+                if (inventario.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay insumos en el catálogo.</td></tr>';
+                } else {
+                    inventario.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.codigo_interno}</td>
+                            <td>${item.descripcion}</td>
+                            <td>
+                                <button class="action-button-edit">Editar</button>
+                            </td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Error al cargar el inventario.</td></tr>';
+            }
+        }
+        window.onload = cargarInventario;
+    </script>
+</body>
+</html>
