@@ -33,7 +33,7 @@
             localStorage.clear();
             window.location.href = 'index.html';
         }
-        window.onload = async function() {
+        async function cargarMisSolicitudes() {
             const tbody = document.getElementById('my-requests-body');
             if (!userId) {
                 tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Error: No se encontró el ID de usuario. Por favor, inicie sesión de nuevo.</td></tr>';
@@ -59,3 +59,10 @@
                 }
             } catch (error) {
                 console.error('Error:', error);
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">Error al cargar las solicitudes.</td></tr>';
+            }
+        }
+        window.onload = cargarMisSolicitudes;
+    </script>
+</body>
+</html>
