@@ -239,3 +239,8 @@ h1 {
 .header-link.logout:hover {
     background-color: #5a6268;
 }
+/* Ajuste para separar botones en la cabecera */
+header div {
+    display: flex;
+    gap: 10px; /* Añade un espacio de 10px entre los botones */
+}
