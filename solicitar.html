@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Solicitar Insumos - CliniStock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="panel-container">
+        <header>
+            <h1>Consultar y Solicitar Insumos</h1>
+            <a href="dashboard.html" class="header-link">Volver al Panel</a>
+        </header>
+        
+        <form method="POST" id="search-form" class="search-form">
+            <input type="text" name="search_term" class="search-input" placeholder="Buscar insumo por nombre...">
+            <button type="submit" class="search-button">Buscar</button>
+        </form>
+
+        <table class="solicitudes-tabla">
+            <thead>
+                <tr>
+                    <th>Insumo</th>
+                    <th>Cantidad Disponible</th>
+                    <th>Acción</th>
+                </tr>
+            </thead>
+            <tbody id="results-body">
+                <tr>
+                    <td colspan="3" style="text-align:center;">Ingresa un término de búsqueda para ver los insumos.</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="solicitarModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle">Solicitar Insumo</h2>
+            <form id="modalForm">
+                <input type="hidden" id="insumoId" name="insumo_id">
+                <div class="input-group">
+                    <label for="cantidad">Cantidad a Solicitar</label>
+                    <input type="number" id="cantidad" name="cantidad" required min="1">
+                </div>
+                <div class="input-group">
+                    <label for="urgencia">Tipo de Urgencia</label>
+                    <select id="urgencia" name="urgencia" required>
+                        <option value="No Urgente">No Urgente</option>
+                        <option value="Urgente">Urgente</option>
+                    </select>
+                </div>
+                <button type="submit" class="submit-button">Confirmar Solicitud</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = 'https://clinistock-final.onrender.com';
+        const searchForm = document.getElementById('search-form');
+        const resultsBody = document.getElementById('results-body');
+        const modal = document.getElementById('solicitarModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const insumoIdInput = document.getElementById('insumoId');
+        const modalForm = document.getElementById('modalForm');
+
+        // Manejar la búsqueda
+        searchForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const searchTerm = event.target.elements.search_term.value;
+            const userId = localStorage.getItem('userId');
+
+            // Aquí llamaremos a una función de API de búsqueda que aún no hemos creado.
+            // Por ahora, simularemos la búsqueda con los datos que ya tenemos.
+            // ESTA PARTE LA MEJORAREMOS LUEGO.
+            // Por ahora, este formulario no hará una búsqueda real, pero nos deja avanzar.
+        });
+
+        // Funciones del modal
+        function openModal(insumoId, insumoDescripcion) {
+            modalTitle.textContent = 'Solicitar: ' + insumoDescripcion;
+            insumoIdInput.value = insumoId;
+            modal.style.display = 'block';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        modalForm.addEventListener('submit', async function(event) {
+            event.preventDefault();
+            const solicitud = {
+                insumo_id: insumoIdInput.value,
+                cantidad: document.getElementById('cantidad').value,
+                urgencia: document.getElementById('urgencia').value,
+                usuario_id: localStorage.getItem('userId') // Asumimos que el ID de usuario está guardado
+            };
+            
+            // Esta es una nueva ruta que debemos añadir a la API
+            const response = await fetch(API_URL + '/crear-solicitud', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify(solicitud)
+            });
+
+            if (response.ok) {
+                alert('¡Solicitud creada con éxito!');
+                closeModal();
+            } else {
+                alert('Hubo un error al crear la solicitud.');
+            }
+        });
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
