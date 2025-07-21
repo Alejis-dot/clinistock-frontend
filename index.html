@@ -49,10 +49,20 @@
                 const data = await response.json();
 
                 if (response.ok && data.success) {
-                    // Guardamos el ID del usuario
+                    // Guardamos los datos del usuario en el navegador
                     localStorage.setItem('isLoggedIn', 'true');
-                    localStorage.setItem('userId', data.userId); 
-                    window.location.href = 'dashboard.html';
+                    localStorage.setItem('userId', data.userId);
+                    localStorage.setItem('userRole', data.role); // <-- Guardamos el rol
+
+                    // --- ESTA ES LA LÓGICA DE REDIRECCIÓN INTELIGENTE ---
+                    if (data.role === 'Gestora') {
+                        // Si eres Gestora, vas al panel principal
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        // Cualquier otro rol va a su página de "Mis Solicitudes"
+                        window.location.href = 'my-requests.html';
+                    }
+
                 } else {
                     errorMessageDiv.textContent = data.message || 'Error desconocido.';
                     errorMessageDiv.style.display = 'block';
