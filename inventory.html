@@ -23,8 +23,7 @@
                     <th>Acciones</th>
                 </tr>
             </thead>
-            <tbody id="inventory-body">
-                </tbody>
+            <tbody id="inventory-body"></tbody>
         </table>
     </div>
 
@@ -51,13 +50,8 @@
         const newItemModal = document.getElementById('newItemModal');
         const newItemForm = document.getElementById('newItemForm');
 
-        function openNewItemModal() {
-            newItemModal.style.display = 'block';
-        }
-
-        function closeNewItemModal() {
-            newItemModal.style.display = 'none';
-        }
+        function openNewItemModal() { newItemModal.style.display = 'block'; }
+        function closeNewItemModal() { newItemModal.style.display = 'none'; }
 
         async function cargarInventario() {
             const tbody = document.getElementById('inventory-body');
@@ -65,9 +59,7 @@
             try {
                 const response = await fetch(API_URL + '/insumos');
                 const inventario = await response.json();
-                
                 tbody.innerHTML = ''; 
-
                 if (inventario.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay insumos en el catálogo.</td></tr>';
                 } else {
@@ -77,14 +69,13 @@
                             <td>${item.codigo_interno}</td>
                             <td>${item.descripcion}</td>
                             <td>
-                                <button class="action-button-edit">Editar</button>
+                                <a href="edit-item.html?id=${item.id}" class="action-button-edit">Editar</a>
                             </td>
                         `;
                         tbody.appendChild(tr);
                     });
                 }
             } catch (error) {
-                console.error('Error:', error);
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Error al cargar el inventario.</td></tr>';
             }
         }
@@ -102,11 +93,10 @@
                     body: JSON.stringify(nuevoInsumo)
                 });
                 const result = await response.json();
-
                 if (response.ok && result.success) {
                     alert('¡Insumo creado con éxito!');
                     closeNewItemModal();
-                    cargarInventario(); // Recargamos la lista para ver el nuevo item
+                    cargarInventario(); 
                 } else {
                     throw new Error(result.message || 'Error desconocido');
                 }
