@@ -9,7 +9,10 @@
     <div class="panel-container">
         <header>
             <h1>Panel de Solicitudes Pendientes</h1>
-            <a href="tracking.html" class="header-link">Seguimiento de Compras</a>
+            <div>
+                <a href="my-requests.html" class="header-link" style="margin-right: 10px;">Mis Solicitudes</a>
+                <a href="tracking.html" class="header-link">Seguimiento de Compras</a>
+            </div>
         </header>
         
         <table class="solicitudes-tabla">
@@ -40,7 +43,7 @@
                 } else {
                     solicitudes.forEach(solicitud => {
                         const tr = document.createElement('tr');
-                        tr.onclick = () => { window.location.href = detail.html?id=${solicitud.id}; };
+                        tr.onclick = () => { window.location.href = `detail.html?id=${solicitud.id}`; };
                         tr.style.cursor = 'pointer';
                         
                         if (solicitud.tipo_urgencia === 'Urgente') {
