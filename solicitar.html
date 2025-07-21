@@ -13,77 +13,49 @@
         </header>
         
         <form id="search-form" class="search-form">
-            <input type="text" id="search-term" name="search_term" class="search-input" placeholder="Buscar insumo por nombre...">
+            <input type="text" id="search-term" name="search_term" class="search-input" placeholder="Buscar por código o nombre...">
             <button type="submit" class="search-button">Buscar</button>
         </form>
 
         <table class="solicitudes-tabla">
             <thead>
                 <tr>
+                    <th>Código</th> 
                     <th>Insumo</th>
                     <th>Realizar Solicitud</th>
                 </tr>
             </thead>
             <tbody id="results-body">
                 <tr>
-                    <td colspan="2" style="text-align:center;">Ingresa un término de búsqueda para ver los insumos.</td>
+                    <td colspan="3" style="text-align:center;">Ingresa un término de búsqueda para ver los insumos.</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
     <div id="solicitarModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeModal()">&times;</span>
-            <h2 id="modalTitle">Solicitar Insumo</h2>
-            <form id="modalForm">
-                <input type="hidden" id="insumoId" name="insumo_id">
-                <div class="input-group">
-                    <label for="cantidad">Cantidad a Solicitar</label>
-                    <input type="number" id="cantidad" name="cantidad" required min="1">
-                </div>
-                <div class="input-group">
-                    <label for="urgencia">Tipo de Urgencia</label>
-                    <select id="urgencia" name="urgencia" required>
-                        <option value="No Urgente">No Urgente</option>
-                        <option value="Urgente">Urgente</option>
-                    </select>
-                </div>
-                <button type="submit" class="submit-button">Confirmar Solicitud</button>
-            </form>
         </div>
-    </div>
 
     <script>
         const API_URL = 'https://clinistock-final.onrender.com';
-        const searchForm = document.getElementById('search-form');
-        const resultsBody = document.getElementById('results-body');
-        const modal = document.getElementById('solicitarModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const insumoIdInput = document.getElementById('insumoId');
-        const modalForm = document.getElementById('modalForm');
+        // ... (el resto del script se queda igual hasta la parte que construye la tabla)
 
+        // Dentro del EventListener del searchForm:
         searchForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const searchTerm = document.getElementById('search-term').value;
-            resultsBody.innerHTML = '<tr><td colspan="2" style="text-align:center;">Buscando...</td></tr>';
-
+            // ... (código de búsqueda se queda igual)
             try {
-                const response = await fetch(API_URL + '/insumos/buscar', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ search_term: searchTerm })
-                });
-
+                // ...
                 const results = await response.json();
                 resultsBody.innerHTML = ''; 
 
                 if (results.length === 0) {
-                    resultsBody.innerHTML = '<tr><td colspan="2" style="text-align:center;">No se encontraron resultados.</td></tr>';
+                    resultsBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No se encontraron resultados.</td></tr>';
                 } else {
                     results.forEach(item => {
                         const tr = document.createElement('tr');
+                        // --- CONSTRUCCIÓN DE LA TABLA MEJORADA ---
                         tr.innerHTML = `
+                            <td>${item.codigo_interno}</td>
                             <td>${item.descripcion}</td>
                             <td>
                                 <button class="action-button" onclick="openModal(${item.id}, '${item.descripcion.replace(/'/g, "\\'")}')">Solicitar</button>
@@ -93,54 +65,10 @@
                     });
                 }
             } catch (error) {
-                console.error('Error en la búsqueda:', error);
-                resultsBody.innerHTML = '<tr><td colspan="2" style="text-align:center; color: red;">Error al realizar la búsqueda.</td></tr>';
+                // ...
             }
         });
-
-        function openModal(insumoId, insumoDescripcion) {
-            modalTitle.textContent = 'Solicitar: ' + insumoDescripcion;
-            insumoIdInput.value = insumoId;
-            modal.style.display = 'block';
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-        }
-
-        modalForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const solicitud = {
-                insumo_id: insumoIdInput.value,
-                cantidad: document.getElementById('cantidad').value,
-                urgencia: document.getElementById('urgencia').value,
-                usuario_id: localStorage.getItem('userId')
-            };
-            
-            try {
-                const response = await fetch(API_URL + '/crear-solicitud', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(solicitud)
-                });
-
-                if (response.ok) {
-                    alert('¡Solicitud creada con éxito!');
-                    closeModal();
-                } else {
-                    throw new Error('La respuesta del servidor no fue OK');
-                }
-            } catch(error) {
-                alert('Hubo un error al crear la solicitud.');
-                console.error('Error:', error);
-            }
-        });
-
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                closeModal();
-            }
-        }
+        // ... (el resto del script se queda igual)
     </script>
 </body>
 </html>
