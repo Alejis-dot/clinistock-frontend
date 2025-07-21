@@ -244,3 +244,14 @@ header div {
     display: flex;
     gap: 10px; /* Añade un espacio de 10px entre los botones */
 }
+
+.actions-cell {
+    display: flex;
+    gap: 10px; /* Espacio entre los botones de Editar y Eliminar */
+}
+.action-button-delete {
+    background-color: #dc3545; /* Rojo */
+}
+.action-button-delete:hover {
+    background-color: #bb2d3b;
+}
