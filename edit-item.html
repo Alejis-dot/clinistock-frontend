@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Insumo - CliniStock</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="panel-container" id="edit-container">
+        <p>Cargando datos del insumo...</p>
+    </div>
+
+    <script>
+        const API_URL = 'https://clinistock-final.onrender.com';
+        const params = new URLSearchParams(window.location.search);
+        const insumoId = params.get('id');
+
+        window.onload = async function() {
+            const container = document.getElementById('edit-container');
+            if (!insumoId) {
+                container.innerHTML = '<h1>Error</h1><p>No se especificó un ID de insumo.</p>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/insumo/${insumoId}`);
+                const item = await response.json();
+                if (!response.ok) throw new Error(item.error || 'Error desconocido');
+
+                container.innerHTML = `
+                    <header>
+                        <h1>Editar Insumo</h1>
+                        <a href="inventory.html" class="header-link">Cancelar y Volver</a>
+                    </header>
+                    <form id="editItemForm">
+                        <div class="input-group">
+                            <label for="codigo_interno">Código Interno</label>
+                            <input type="text" id="codigo_interno" value="${item.codigo_interno}" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="descripcion">Descripción</label>
+                            <input type="text" id="descripcion" value="${item.descripcion}" required>
+                        </div>
+                        <button type="submit" class="submit-button">Guardar Cambios</button>
+                    </form>
+                `;
+
+                document.getElementById('editItemForm').addEventListener('submit', handleUpdate);
+
+            } catch (error) {
+                container.innerHTML = `<h1>Error al cargar</h1><p>${error.message}</p>`;
+            }
+        };
+        
+        async function handleUpdate(event) {
+            event.preventDefault();
+            const updatedData = {
+                codigo_interno: document.getElementById('codigo_interno').value,
+                descripcion: document.getElementById('descripcion').value,
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/insumo/actualizar/${insumoId}`, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(updatedData)
+                });
+                const result = await response.json();
+                if (!response.ok) throw new Error(result.message || 'Error al actualizar');
+                
+                alert('¡Insumo actualizado con éxito!');
+                window.location.href = 'inventory.html'; // Vuelve a la lista de inventario
+            } catch (error) {
+                alert(`Error al guardar los cambios: ${error.message}`);
+            }
+        }
+    </script>
+</body>
+</html>
