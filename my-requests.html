@@ -27,7 +27,42 @@
     </div>
 
     <script>
-        // ... (El script se queda exactamente igual) ...
+        const API_URL = 'https://clinistock-final.onrender.com';
+        const userId = localStorage.getItem('userId');
+
+        async function cargarMisSolicitudes() {
+            const tbody = document.getElementById('my-requests-body');
+            if (!userId) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Error: No se encontró el ID de usuario. Por favor, inicie sesión de nuevo.</td></tr>';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_URL}/mis-solicitudes/${userId}`);
+                const solicitudes = await response.json();
+                
+                tbody.innerHTML = ''; 
+
+                if (solicitudes.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No has realizado ninguna solicitud.</td></tr>';
+                } else {
+                    solicitudes.forEach(solicitud => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${solicitud.descripcion}</td>
+                            <td>${solicitud.cantidad_solicitada}</td>
+                            <td>${new Date(solicitud.fecha_solicitud).toLocaleDateString()}</td>
+                            <td><span class="status-badge status-${solicitud.estado.toLowerCase()}">${solicitud.estado}</span></td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">Error al cargar las solicitudes.</td></tr>';
+            }
+        }
+        window.onload = cargarMisSolicitudes;
     </script>
 </body>
 </html>
