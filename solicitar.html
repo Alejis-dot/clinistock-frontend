@@ -9,7 +9,7 @@
     <div class="panel-container">
         <header>
             <h1>Consultar y Solicitar Insumos</h1>
-            <a href="dashboard.html" class="header-link">Volver al Panel</a>
+            <a href="my-requests.html" class="header-link">Ver Mis Solicitudes</a>
         </header>
         
         <form id="search-form" class="search-form">
@@ -21,68 +21,31 @@
             <thead>
                 <tr>
                     <th>Insumo</th>
-                    <th>Cantidad Disponible</th>
                     <th>Acción</th>
                 </tr>
             </thead>
             <tbody id="results-body">
                 <tr>
-                    <td colspan="3" style="text-align:center;">Ingresa un término de búsqueda para ver los insumos.</td>
+                    <td colspan="2" style="text-align:center;">Ingresa un término de búsqueda para ver los insumos.</td>
                 </tr>
             </tbody>
         </table>
     </div>
 
-    <div id="solicitarModal" class="modal" style="display: none;">
-        </div>
-
     <script>
-        const API_URL = 'https://clinistock-final.onrender.com';
-        const searchForm = document.getElementById('search-form');
-        const resultsBody = document.getElementById('results-body');
-        const modal = document.getElementById('solicitarModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const insumoIdInput = document.getElementById('insumoId');
-        const modalForm = document.getElementById('modalForm');
-
-        // --- ESTA ES LA FUNCIÓN DE BÚSQUEDA CORREGIDA ---
-        searchForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const searchTerm = document.getElementById('search-term').value;
-            resultsBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Buscando...</td></tr>';
-
-            try {
-                const response = await fetch(API_URL + '/insumos/buscar', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify({ search_term: searchTerm })
-                });
-
-                const results = await response.json();
-                resultsBody.innerHTML = ''; // Limpiar la tabla
-
-                if (results.length === 0) {
-                    resultsBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No se encontraron resultados.</td></tr>';
-                } else {
-                    results.forEach(item => {
-                        const tr = document.createElement('tr');
-                        tr.innerHTML = `
-                            <td>${item.descripcion}</td>
-                            <td>${item.cantidad_disponible}</td>
-                            <td>
-                                <button class="action-button" onclick="openModal(${item.id}, '${item.descripcion}')">Solicitar</button>
-                            </td>
-                        `;
-                        resultsBody.appendChild(tr);
-                    });
-                }
-            } catch (error) {
-                console.error('Error en la búsqueda:', error);
-                resultsBody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Error al realizar la búsqueda.</td></tr>';
-            }
+        // ... (El script que maneja la búsqueda y el modal) ...
+        // Se debe modificar la parte que construye la tabla
+        results.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.descripcion}</td>
+                <td>
+                    <button class="action-button" onclick="openModal(${item.id}, '${item.descripcion}')">Solicitar</button>
+                </td>
+            `;
+            resultsBody.appendChild(tr);
         });
-
-        // ... (El resto del script para el modal y crear solicitud se queda igual) ...
+        // ...
     </script>
 </body>
 </html>
