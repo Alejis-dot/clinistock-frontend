@@ -8,7 +8,70 @@ body {
     color: #333;
 }
 
-/* ... (el resto del CSS de Login se queda igual) ... */
+.login-container {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 320px;
+    text-align: center;
+    margin: 10% auto;
+}
+
+.logo {
+    max-width: 150px;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.input-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+
+input[type="text"], input[type="password"], input[type="number"], textarea, select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+button, .submit-button, .search-button, .action-button, .action-button-edit {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #0d6efd;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+button:hover, .submit-button:hover, .search-button:hover, .action-button:hover {
+    background-color: #0b5ed7;
+}
+
+.flash.error {
+    padding: 10px;
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
 
 /* Estilos de Paneles (Dashboard, Detalle, etc.) */
 .panel-container {
@@ -20,20 +83,159 @@ body {
     padding: 30px;
 }
 
-/* ... (el resto del CSS de Paneles se queda igual) ... */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
 
-.status-agotado { background-color: #dc3545; }
-
-/* --- ESTILOS NUEVOS --- */
-.action-button-edit {
-    padding: 8px 12px;
-    border: none;
+header .header-link {
+    padding: 10px 15px;
     border-radius: 4px;
-    background-color: #ffc107; /* Amarillo */
-    color: #000;
+    background-color: #0d6efd;
+    color: white;
+    font-size: 14px;
     cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+header .header-link:hover {
+    background-color: #0b5ed7;
+}
+
+h1 {
+    font-size: 24px;
+    margin: 0;
+}
+
+.solicitudes-tabla {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.solicitudes-tabla th, .solicitudes-tabla td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.solicitudes-tabla th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+}
+
+.solicitudes-tabla tr.urgente {
+    background-color: #fff0f1;
     font-weight: 500;
 }
-.action-button-edit:hover {
-    background-color: #e9b306;
+
+.solicitudes-tabla tr:last-child td {
+    border-bottom: none;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+
+.status-solicitado { background-color: #6c757d; }
+.status-comprado { background-color: #0d6efd; }
+.status-enviado { background-color: #ffc107; }
+.status-recibido { background-color: #198754; }
+.status-agotado { background-color: #dc3545; }
+
+/* Estilos para formularios y grillas de detalle */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+.detail-item p {
+    margin: 5px 0 0;
+}
+.management-section form {
+    margin-top: 20px;
+}
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+.input-group.full-width {
+    grid-column: 1 / -1;
+}
+
+/* Estilos para Modal (Ventana Emergente) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5);
+}
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 30px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 400px;
+    border-radius: 8px;
+    position: relative;
+}
+.close-button {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+.close-button:hover,
+.close-button:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Estilos para la barra de búsqueda */
+.search-form {
+    display: flex;
+    margin-bottom: 20px;
+}
+.search-input {
+    flex-grow: 1;
+}
+.search-button, .action-button, .action-button-edit {
+    width: auto;
+    flex-shrink: 0;
+}
+.search-button {
+    border-radius: 0 4px 4px 0;
+}
+.action-button { background-color: #198754; }
+.action-button:hover { background-color: #157347; }
+.action-button-edit { background-color: #ffc107; color: #000; }
+.action-button-edit:hover { background-color: #e9b306; }
+
+/* Estilo para el botón de Cerrar Sesión */
+.header-link.logout {
+    background-color: #6c757d;
+    margin-left: 10px;
+}
+.header-link.logout:hover {
+    background-color: #5a6268;
 }
