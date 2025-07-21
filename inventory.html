@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-g">
     <title>Administrar Inventario - CliniStock</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -68,8 +68,9 @@
                         tr.innerHTML = `
                             <td>${item.codigo_interno}</td>
                             <td>${item.descripcion}</td>
-                            <td>
+                            <td class="actions-cell">
                                 <a href="edit-item.html?id=${item.id}" class="action-button-edit">Editar</a>
+                                <button class="action-button-delete" onclick="handleDelete(${item.id})">Eliminar</button>
                             </td>
                         `;
                         tbody.appendChild(tr);
@@ -77,6 +78,26 @@
                 }
             } catch (error) {
                 tbody.innerHTML = '<tr><td colspan="3" style="text-align:center; color: red;">Error al cargar el inventario.</td></tr>';
+            }
+        }
+        
+        async function handleDelete(insumoId) {
+            // Pedimos confirmación antes de borrar
+            if (confirm('¿Estás segura de que quieres eliminar este insumo? Esta acción no se puede deshacer.')) {
+                try {
+                    const response = await fetch(`${API_URL}/insumo/eliminar/${insumoId}`, {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        alert(result.message);
+                        cargarInventario(); // Recargamos la lista para ver el cambio
+                    } else {
+                        throw new Error(result.message || 'Error desconocido');
+                    }
+                } catch (error) {
+                    alert(`Error al eliminar el insumo: ${error.message}`);
+                }
             }
         }
 
