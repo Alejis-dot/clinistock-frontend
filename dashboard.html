@@ -10,10 +10,12 @@
         <header>
             <h1>Panel de Solicitudes Pendientes</h1>
             <div>
+                <a href="inventory.html" class="header-link" style="margin-right: 10px;">Administrar Inventario</a>
                 <a href="tracking.html" class="header-link">Seguimiento de Compras</a>
                 <a href="#" onclick="logout()" class="header-link logout">Cerrar Sesión</a>
             </div>
         </header>
+        
         <table class="solicitudes-tabla">
             <thead>
                 <tr>
@@ -25,6 +27,7 @@
             <tbody id="solicitudes-body"></tbody>
         </table>
     </div>
+
     <script>
         const API_URL = 'https://clinistock-final.onrender.com';
         function logout() {
