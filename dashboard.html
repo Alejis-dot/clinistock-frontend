@@ -14,7 +14,6 @@
                 <a href="#" onclick="logout()" class="header-link logout">Cerrar Sesión</a>
             </div>
         </header>
-        
         <table class="solicitudes-tabla">
             <thead>
                 <tr>
@@ -26,23 +25,18 @@
             <tbody id="solicitudes-body"></tbody>
         </table>
     </div>
-
     <script>
         const API_URL = 'https://clinistock-final.onrender.com';
-
-        // --- FUNCIÓN DE LOGOUT AÑADIDA ---
         function logout() {
-            localStorage.clear(); // Borra todos los datos guardados
-            window.location.href = 'index.html'; // Redirige a la página de inicio
+            localStorage.clear();
+            window.location.href = 'index.html';
         }
-
         async function cargarSolicitudes() {
             try {
                 const response = await fetch(API_URL + '/solicitudes-pendientes');
                 const solicitudes = await response.json();
                 const tbody = document.getElementById('solicitudes-body');
                 tbody.innerHTML = ''; 
-
                 if (solicitudes.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay solicitudes pendientes. ¡Buen trabajo!</td></tr>';
                 } else {
@@ -50,7 +44,6 @@
                         const tr = document.createElement('tr');
                         tr.onclick = () => { window.location.href = `detail.html?id=${solicitud.id}`; };
                         tr.style.cursor = 'pointer';
-                        
                         if (solicitud.tipo_urgencia === 'Urgente') {
                             tr.classList.add('urgente');
                         }
