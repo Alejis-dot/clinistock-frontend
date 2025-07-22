@@ -255,3 +255,32 @@ header div {
 .action-button-delete:hover {
     background-color: #bb2d3b;
 }
+
+/* --- Estilos para Notificaciones --- */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 20px;
+    border-radius: 6px;
+    color: white;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.notification.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.notification.success {
+    background-color: #198754; /* Verde */
+}
+
+.notification.error {
+    background-color: #dc3545; /* Rojo */
+}
