@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-g">
+    <meta charset="UTF-8">
     <title>Administrar Inventario - CliniStock</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -82,21 +82,20 @@
         }
         
         async function handleDelete(insumoId) {
-            // Pedimos confirmación antes de borrar
-            if (confirm('¿Estás segura de que quieres eliminar este insumo? Esta acción no se puede deshacer.')) {
+            if (confirm('¿Estás segura de que quieres eliminar este insumo?')) {
                 try {
-                    const response = await fetch(`${API_URL}/insumo/eliminar/${insumoId}`, {
+                    const response = await fetch(${API_URL}/insumo/eliminar/${insumoId}, {
                         method: 'POST'
                     });
                     const result = await response.json();
                     if (response.ok && result.success) {
                         alert(result.message);
-                        cargarInventario(); // Recargamos la lista para ver el cambio
+                        cargarInventario();
                     } else {
                         throw new Error(result.message || 'Error desconocido');
                     }
                 } catch (error) {
-                    alert(`Error al eliminar el insumo: ${error.message}`);
+                    alert(Error al eliminar el insumo: ${error.message});
                 }
             }
         }
@@ -108,30 +107,4 @@
                 descripcion: document.getElementById('descripcion').value
             };
             try {
-                const response = await fetch(API_URL + '/insumos/crear', {
-                    method: 'POST',
-                    headers: {'Content-Type': 'application/json'},
-                    body: JSON.stringify(nuevoInsumo)
-                });
-                const result = await response.json();
-                if (response.ok && result.success) {
-                    alert('¡Insumo creado con éxito!');
-                    closeNewItemModal();
-                    cargarInventario(); 
-                } else {
-                    throw new Error(result.message || 'Error desconocido');
-                }
-            } catch (error) {
-                alert(`Error al crear el insumo: ${error.message}`);
-            }
-        });
-
-        window.onload = cargarInventario;
-        window.onclick = function(event) {
-            if (event.target == newItemModal) {
-                closeNewItemModal();
-            }
-        }
-    </script>
-</body>
-</html>
+                const response =
