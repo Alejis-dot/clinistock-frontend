@@ -63,7 +63,7 @@
                 if (inventario.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay insumos en el catálogo.</td></tr>';
                 } else {
-                    inventario.forEach(item => {
+                  inventory.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${item.codigo_interno}</td>
