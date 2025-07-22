@@ -23,7 +23,7 @@
             }
 
             try {
-                const response = await fetch(${API_URL}/usuario/${usuarioId});
+                const response = await fetch(`${API_URL}/usuario/${usuarioId}`);
                 const user = await response.json();
                 if (!response.ok) throw new Error(user.error || 'Error desconocido');
 
@@ -52,7 +52,7 @@
                 document.getElementById('editUserForm').addEventListener('submit', handleUpdate);
 
             } catch (error) {
-                container.innerHTML = <h1>Error al cargar</h1><p>${error.message}</p>;
+                container.innerHTML = `<h1>Error al cargar</h1><p>${error.message}</p>`;
             }
         };
         
@@ -65,7 +65,7 @@
             };
 
             try {
-                const response = await fetch(${API_URL}/usuario/actualizar/${usuarioId}, {
+                const response = await fetch(`${API_URL}/usuario/actualizar/${usuarioId}`, {
                     method: 'POST',
                     headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(updatedData)
@@ -76,7 +76,7 @@
                 alert('¡Usuario actualizado con éxito!');
                 window.location.href = 'users.html';
             } catch (error) {
-                alert(Error al guardar los cambios: ${error.message});
+                alert(`Error al guardar los cambios: ${error.message}`);
             }
         }
     </script>
