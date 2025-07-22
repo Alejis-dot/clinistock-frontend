@@ -35,20 +35,20 @@
             <h2>Crear Nuevo Usuario</h2>
             <form id="newUserForm">
                 <div class="input-group">
-                    <label for="nombre_usuario_modal">Código de Usuario (para iniciar sesión)</label>
-                    <input type="text" id="nombre_usuario_modal" required>
+                    <label for="nombre_usuario">Código de Usuario (para iniciar sesión)</label>
+                    <input type="text" id="nombre_usuario" required>
                 </div>
                 <div class="input-group">
-                    <label for="nombre_completo_modal">Nombre Completo</label>
-                    <input type="text" id="nombre_completo_modal" required>
+                    <label for="nombre_completo">Nombre Completo</label>
+                    <input type="text" id="nombre_completo" required>
                 </div>
                 <div class="input-group">
-                    <label for="contrasena_modal">Contraseña Temporal</label>
-                    <input type="password" id="contrasena_modal" required>
+                    <label for="contrasena">Contraseña Temporal</label>
+                    <input type="password" id="contrasena" required>
                 </div>
                 <div class="input-group">
-                    <label for="rol_modal">Rol</label>
-                    <select id="rol_modal">
+                    <label for="rol">Rol</label>
+                    <select id="rol">
                         <option value="Solicitante" selected>Solicitante</option>
                         <option value="Gestora">Gestora</option>
                     </select>
@@ -62,24 +62,19 @@
         const API_URL = 'https://clinistock-final.onrender.com';
         const newUserModal = document.getElementById('newUserModal');
         const newUserForm = document.getElementById('newUserForm');
-        const usersBody = document.getElementById('users-body');
 
-        function openNewUserModal() {
-            newUserModal.style.display = 'block';
-        }
-
-        function closeNewUserModal() {
-            newUserModal.style.display = 'none';
-        }
+        function openNewUserModal() { newUserModal.style.display = 'block'; }
+        function closeNewUserModal() { newUserModal.style.display = 'none'; }
 
         async function cargarUsuarios() {
-            usersBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Cargando usuarios...</td></tr>';
+            const tbody = document.getElementById('users-body');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Cargando usuarios...</td></tr>';
             try {
                 const response = await fetch(API_URL + '/usuarios');
                 const usuarios = await response.json();
-                usersBody.innerHTML = ''; 
+                tbody.innerHTML = ''; 
                 if (usuarios.length === 0) {
-                    usersBody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay usuarios de tipo "Solicitante".</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay usuarios de tipo "Solicitante".</td></tr>';
                 } else {
                     usuarios.forEach(user => {
                         const tr = document.createElement('tr');
@@ -87,26 +82,23 @@
                             <td>${user.nombre_usuario}</td>
                             <td>${user.nombre_completo}</td>
                             <td>${user.rol}</td>
-                            <td>
-                                <a href="edit-user.html?id=${user.id}" class="action-button-edit">Editar</a>
-                            </td>
+                            <td><button class="action-button-edit">Editar</button></td>
                         `;
-                        usersBody.appendChild(tr);
+                        tbody.appendChild(tr);
                     });
                 }
             } catch (error) {
-                console.error('Error al cargar usuarios:', error);
-                usersBody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">Error al cargar usuarios.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">Error al cargar usuarios.</td></tr>';
             }
         }
 
         newUserForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             const nuevoUsuario = {
-                nombre_usuario: document.getElementById('nombre_usuario_modal').value,
-                contrasena: document.getElementById('contrasena_modal').value,
-                nombre_completo: document.getElementById('nombre_completo_modal').value,
-                rol: document.getElementById('rol_modal').value
+                nombre_usuario: document.getElementById('nombre_usuario').value,
+                contrasena: document.getElementById('contrasena').value,
+                nombre_completo: document.getElementById('nombre_completo').value,
+                rol: document.getElementById('rol').value
             };
             try {
                 const response = await fetch(API_URL + '/usuarios/crear', {
@@ -128,12 +120,11 @@
         });
 
         window.onload = cargarUsuarios;
-
         window.onclick = function(event) {
             if (event.target == newUserModal) {
                 closeNewUserModal();
             }
-        };
+        }
     </script>
 </body>
 </html>
