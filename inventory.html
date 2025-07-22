@@ -10,7 +10,10 @@
         <header>
             <h1>Administrar Inventario</h1>
             <div>
-                <button class="header-link" onclick="openNewItemModal()" >Añadir Insumo</button><a href="dashboard.html" class="header-link">Volver al Panel</a> </div> </header>
+                <button class="header-link" onclick="openNewItemModal()">Añadir Insumo</button>
+                <a href="dashboard.html" class="header-link">Volver al Panel</a>
+            </div>
+        </header>
         
         <table class="solicitudes-tabla">
             <thead>
@@ -60,7 +63,7 @@
                 if (inventario.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="3" style="text-align:center;">No hay insumos en el catálogo.</td></tr>';
                 } else {
-                  inventory.forEach(item => {
+                    inventario.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
                             <td>${item.codigo_interno}</td>
@@ -104,4 +107,30 @@
                 descripcion: document.getElementById('descripcion').value
             };
             try {
-                const response =
+                const response = await fetch(API_URL + '/insumos/crear', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(nuevoInsumo)
+                });
+                const result = await response.json();
+                if (response.ok && result.success) {
+                    alert('¡Insumo creado con éxito!');
+                    closeNewItemModal();
+                    cargarInventario(); 
+                } else {
+                    throw new Error(result.message || 'Error desconocido');
+                }
+            } catch (error) {
+                alert(Error al crear el insumo: ${error.message});
+            }
+        });
+
+        window.onload = cargarInventario;
+        window.onclick = function(event) {
+            if (event.target == newItemModal) {
+                closeNewItemModal();
+            }
+        }
+    </script>
+</body>
+</html>
