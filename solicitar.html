@@ -9,7 +9,10 @@
     <div class="panel-container">
         <header>
             <h1>Consultar y Solicitar Insumos</h1>
-            <a href="my-requests.html" class="header-link">Ver Mis Solicitudes</a>
+            <div>
+                <a href="my-requests.html" class="header-link">Ver Mis Solicitudes</a>
+                <a href="#" onclick="logout()" class="header-link logout">Cerrar Sesión</a>
+            </div>
         </header>
         
         <form id="search-form" class="search-form">
@@ -64,6 +67,29 @@
         const insumoIdInput = document.getElementById('insumoId');
         const modalForm = document.getElementById('modalForm');
 
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 10);
+
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 500);
+            }, 3000);
+        }
+
         function openModal(insumoId, insumoDescripcion) {
             modalTitle.textContent = 'Solicitar: ' + insumoDescripcion;
             insumoIdInput.value = insumoId;
@@ -94,7 +120,6 @@
                 } else {
                     results.forEach(item => {
                         const tr = document.createElement('tr');
-                        // Usamos textContent para evitar problemas con comillas en la descripción
                         const descTd = document.createElement('td');
                         descTd.textContent = item.descripcion;
                         const codeTd = document.createElement('td');
@@ -134,13 +159,16 @@
                 });
 
                 if (response.ok) {
-                    alert('¡Solicitud creada con éxito!');
-                    window.location.href = 'my-requests.html';
+                    closeModal();
+                    showNotification('¡Solicitud creada con éxito!');
+                    setTimeout(() => {
+                        window.location.href = 'my-requests.html';
+                    }, 1500); // Esperamos 1.5 segundos para que se vea la notificación
                 } else {
                     throw new Error('La respuesta del servidor no fue OK');
                 }
             } catch(error) {
-                alert('Hubo un error al crear la solicitud.');
+                showNotification('Hubo un error al crear la solicitud.', 'error');
                 console.error('Error:', error);
             }
         });
