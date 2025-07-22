@@ -45,7 +45,7 @@
                 } else {
                     solicitudes.forEach(solicitud => {
                         const tr = document.createElement('tr');
-                        tr.onclick = () => {window.location.href = `detail.html?id=${solicitud.id}`;};
+                        tr.onclick = () => { window.location.href = `detail.html?id=${solicitud.id}`; };
                         tr.style.cursor = 'pointer';
                         if (solicitud.tipo_urgencia === 'Urgente') {
                             tr.classList.add('urgente');
