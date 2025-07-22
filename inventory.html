@@ -62,7 +62,7 @@
         async function handleDelete(insumoId) {
             if (confirm('¿Estás segura de que quieres eliminar este insumo?')) {
                 try {
-                    const response = await fetch(${API_URL}/insumo/eliminar/${insumoId}, {
+                    const response = await fetch(${API_URL}/insumo/eliminar/${insumoId}), {
                         method: 'POST'
                     });
                     const result = await response.json();
