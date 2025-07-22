@@ -10,7 +10,7 @@
         <header>
             <h1>Administrar Usuarios</h1>
             <div>
-                <button class="header-link" onclick="openNewUserModal()">Crear Usuario</button>
+                <button class="header-link" onclick="openNewUserModal()" style="margin-right: 10px;">Crear Usuario</button>
                 <a href="dashboard.html" class="header-link">Volver al Panel</a>
             </div>
         </header>
@@ -34,25 +34,25 @@
             <h2>Crear Nuevo Usuario</h2>
             <form id="newUserForm">
                 <div class="input-group">
-                    <label for="nombre_usuario_modal">Código de Usuario (para iniciar sesión)</label>
-                    <input type="text" id="nombre_usuario_modal" required>
+                    <label for="nombre_usuario">Código de Usuario (para iniciar sesión)</label>
+                    <input type="text" id="nombre_usuario" required>
                 </div>
                 <div class="input-group">
-                    <label for="nombre_completo_modal">Nombre Completo</label>
-                    <input type="text" id="nombre_completo_modal" required>
+                    <label for="nombre_completo">Nombre Completo</label>
+                    <input type="text" id="nombre_completo" required>
                 </div>
                 <div class="input-group">
-                    <label for="contrasena_modal">Contraseña Temporal</label>
-                    <input type="password" id="contrasena_modal" required>
+                    <label for="contrasena">Contraseña Temporal</label>
+                    <input type="password" id="contrasena" required>
                 </div>
                 <div class="input-group">
-                    <label for="rol_modal">Rol</label>
-                    <select id="rol_modal">
+                    <label for="rol">Rol</label>
+                    <select id="rol">
                         <option value="Solicitante" selected>Solicitante</option>
                         <option value="Gestora">Gestora</option>
                     </select>
                 </div>
-                <button type="submit" class="submit-button">Guardar Usuario</button>
+                <button type="submit" class="action-button">Guardar Usuario</button>
             </form>
         </div>
     </div>
@@ -96,10 +96,10 @@
         newUserForm.addEventListener('submit', async function(event) {
             event.preventDefault();
             const nuevoUsuario = {
-                nombre_usuario: document.getElementById('nombre_usuario_modal').value,
-                contrasena: document.getElementById('contrasena_modal').value,
-                nombre_completo: document.getElementById('nombre_completo_modal').value,
-                rol: document.getElementById('rol_modal').value
+                nombre_usuario: document.getElementById('nombre_usuario').value,
+                contrasena: document.getElementById('contrasena').value,
+                nombre_completo: document.getElementById('nombre_completo').value,
+                rol: document.getElementById('rol').value
             };
             try {
                 const response = await fetch(API_URL + '/usuarios/crear', {
