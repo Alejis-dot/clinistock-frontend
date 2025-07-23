@@ -22,6 +22,7 @@
                     <th>Solicitante</th>
                     <th>Fecha Solicitud</th>
                     <th>Estado</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="tracking-body"></tbody>
@@ -29,6 +30,24 @@
     </div>
     <script>
         const API_URL = 'https://clinistock-final.onrender.com';
+        async function handleDeleteSolicitud(solicitudId) {
+            if (confirm('¿Estás segura de que quieres eliminar esta solicitud de forma permanente?')) {
+                try {
+                    const response = await fetch(`${API_URL}/solicitud/eliminar/${solicitudId}`, {
+                        method: 'POST'
+                    });
+                    const result = await response.json();
+                    if (response.ok && result.success) {
+                        showNotification('Solicitud eliminada con éxito.');
+                        cargarSeguimiento(); // Recargamos la lista
+                    } else {
+                        throw new Error(result.message || 'Error desconocido');
+                    }
+                } catch (error) {
+                    showNotification(`Error al eliminar: ${error.message}`, 'error');
+                }
+            }
+        }
         function logout() {
             localStorage.clear();
             window.location.href = 'index.html';
