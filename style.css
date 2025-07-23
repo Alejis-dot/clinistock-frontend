@@ -284,3 +284,18 @@ header div {
 .notification.error {
     background-color: #dc3545; /* Rojo */
 }
+
+/* Estilo para el botón de eliminar solicitud */
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    color: #dc3545; /* Rojo */
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    padding: 5px;
+    line-height: 1;
+}
+.delete-btn:hover {
+    color: #a01c28;
+}
