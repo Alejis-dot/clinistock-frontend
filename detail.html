@@ -52,8 +52,10 @@
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message || 'Error al actualizar');
                 
-                showNotification('¡Solicitud actualizada con éxito!');
-                document.getElementById('estado-actual').textContent = updatedData.estado;
+                // --- ESTA ES LA LÍNEA MODIFICADA ---
+                // En lugar de una alerta, ahora redirige al dashboard.
+                window.location.href = 'dashboard.html';
+
             } catch (error) {
                 console.error('Error:', error);
                 showNotification(`Error al guardar: ${error.message}`, 'error');
