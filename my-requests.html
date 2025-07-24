@@ -14,7 +14,6 @@
                 <a href="#" onclick="logout()" class="header-link logout">Cerrar Sesión</a>
             </div>
         </header>
-        
         <table class="solicitudes-tabla">
             <thead>
                 <tr>
@@ -24,75 +23,31 @@
                     <th>Estado</th>
                 </tr>
             </thead>
-            <tbody id="my-requests-body">
-                </tbody>
+            <tbody id="my-requests-body"></tbody>
         </table>
     </div>
-
-    <div id="detailModal" class="modal" style="display: none;">
-        <div class="modal-content">
-            <span class="close-button" onclick="closeDetailModal()">&times;</span>
-            <h2 id="modalDetailTitle">Detalle de la Solicitud</h2>
-            <div id="modalDetailContent">
-                </div>
-        </div>
-    </div>
-
     <script>
         const API_URL = 'https://clinistock-final.onrender.com';
         const userId = localStorage.getItem('userId');
-        const detailModal = document.getElementById('detailModal');
-
         function logout() {
             localStorage.clear();
             window.location.href = 'index.html';
         }
-
-        function closeDetailModal() {
-            detailModal.style.display = 'none';
-        }
-
-        async function showRequestDetails(solicitudId) {
-            const modalContent = document.getElementById('modalDetailContent');
-            modalContent.innerHTML = '<p>Cargando detalles...</p>';
-            detailModal.style.display = 'block';
-
-            try {
-                const response = await fetch(`${API_URL}/solicitud/${solicitudId}`);
-                const detalle = await response.json();
-                if (!response.ok) throw new Error(detalle.error || 'Error desconocido');
-
-                document.getElementById('modalDetailTitle').textContent = `Detalle de: ${detalle.insumo_descripcion}`;
-                modalContent.innerHTML = `
-                    <div class="detail-grid-modal">
-                        <div class="detail-item"><strong>Orden de Compra:</strong><p>${detalle.orden_compra || 'No asignada'}</p></div>
-                        <div class="detail-item"><strong>Proveedor:</strong><p>${detalle.proveedor || 'No asignado'}</p></div>
-                        <div class="detail-item"><strong>Notas de Compras:</strong><p>${detalle.notas_internas || 'Sin notas'}</p></div>
-                    </div>
-                `;
-            } catch (error) {
-                modalContent.innerHTML = `<p style="color: red;">Error al cargar los detalles: ${error.message}</p>`;
-            }
-        }
-
         async function cargarMisSolicitudes() {
             const tbody = document.getElementById('my-requests-body');
-            // ... (el resto de la función cargarMisSolicitudes se queda igual)
+            if (!userId) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Error: No se encontró el ID de usuario. Por favor, inicie sesión de nuevo.</td></tr>';
+                return;
+            }
             try {
                 const response = await fetch(`${API_URL}/mis-solicitudes/${userId}`);
                 const solicitudes = await response.json();
-                
                 tbody.innerHTML = ''; 
-
                 if (solicitudes.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">No has realizado ninguna solicitud.</td></tr>';
                 } else {
                     solicitudes.forEach(solicitud => {
                         const tr = document.createElement('tr');
-                        // Hacemos la fila clickeable para mostrar detalles
-                        tr.style.cursor = 'pointer';
-                        tr.onclick = () => showRequestDetails(solicitud.id);
-
                         tr.innerHTML = `
                             <td>${solicitud.descripcion}</td>
                             <td>${solicitud.cantidad_solicitada}</td>
@@ -107,13 +62,7 @@
                 tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color: red;">Error al cargar las solicitudes.</td></tr>';
             }
         }
-
         window.onload = cargarMisSolicitudes;
-        window.onclick = function(event) {
-            if (event.target == detailModal) {
-                closeDetailModal();
-            }
-        }
     </script>
 </body>
 </html>
