@@ -252,3 +252,11 @@ header div {
     align-items: center;
     gap: 10px; 
 }
+
+/* Estilo para la grilla de detalles en el modal */
+.detail-grid-modal {
+    display: grid;
+    grid-template-columns: 1fr; /* Una sola columna para el modal */
+    gap: 15px;
+    margin-top: 20px;
+}
