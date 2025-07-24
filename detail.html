@@ -21,16 +21,10 @@
             notification.className = `notification ${type}`;
             notification.textContent = message;
             document.body.appendChild(notification);
-
-            setTimeout(() => {
-                notification.classList.add('show');
-            }, 10);
-
+            setTimeout(() => { notification.classList.add('show'); }, 10);
             setTimeout(() => {
                 notification.classList.remove('show');
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 500);
+                setTimeout(() => { document.body.removeChild(notification); }, 500);
             }, 3000);
         }
 
@@ -42,7 +36,6 @@
                 proveedor: document.getElementById('proveedor').value,
                 notas_internas: document.getElementById('notas_internas').value,
             };
-
             try {
                 const response = await fetch(`${API_URL}/solicitud/actualizar/${solicitudId}`, {
                     method: 'POST',
@@ -51,11 +44,8 @@
                 });
                 const result = await response.json();
                 if (!response.ok) throw new Error(result.message || 'Error al actualizar');
-                
-                // --- ESTA ES LA LÍNEA MODIFICADA ---
-                // En lugar de una alerta, ahora redirige al dashboard.
-                window.location.href = 'dashboard.html';
-
+                showNotification('¡Solicitud actualizada con éxito!');
+                document.getElementById('estado-actual').textContent = updatedData.estado;
             } catch (error) {
                 console.error('Error:', error);
                 showNotification(`Error al guardar: ${error.message}`, 'error');
@@ -71,57 +61,62 @@
 
             try {
                 const response = await fetch(`${API_URL}/solicitud/${solicitudId}`);
-                const detalle = await response.json();
-                if (!response.ok) throw new Error(detalle.error || 'Error desconocido');
-
-                container.innerHTML = `
-                    <header>
-                        <h1>Detalle de la Solicitud #${detalle.id}</h1>
-                        <a href="dashboard.html" class="header-link">Volver al Panel</a>
-                    </header>
-                    <div class="detail-grid">
-                        <div class="detail-item"><strong>Insumo:</strong><p>${detalle.insumo_descripcion}</p></div>
-                        <div class="detail-item"><strong>Cantidad Solicitada:</strong><p>${detalle.cantidad_solicitada}</p></div>
-                        <div class="detail-item"><strong>Urgencia:</strong><p>${detalle.tipo_urgencia}</p></div>
-                        <div class="detail-item"><strong>Solicitado por:</strong><p>${detalle.usuario_nombre}</p></div>
-                        <div class="detail-item"><strong>Fecha de Solicitud:</strong><p>${new Date(detalle.fecha_solicitud).toLocaleString()}</p></div>
-                        <div class="detail-item"><strong>Estado Actual:</strong><p id="estado-actual">${detalle.estado}</p></div>
-                    </div>
-                    <hr>
-                    <div class="management-section">
-                        <h2>Gestionar Solicitud</h2>
-                        <form id="management-form">
-                            <div class="form-grid">
-                                <div class="input-group">
-                                    <label for="orden_compra">Orden de Compra</label>
-                                    <input type="text" id="orden_compra" name="orden_compra" value="${detalle.orden_compra || ''}">
+                // Verificamos si la respuesta es JSON antes de intentar leerla
+                const contentType = response.headers.get("content-type");
+                if (contentType && contentType.indexOf("application/json") !== -1) {
+                    const detalle = await response.json();
+                    if (!response.ok) throw new Error(detalle.error || 'Error desconocido');
+                    // Construimos el HTML... (código idéntico al anterior)
+                    container.innerHTML = `
+                        <header>
+                            <h1>Detalle de la Solicitud #${detalle.id}</h1>
+                            <a href="dashboard.html" class="header-link">Volver al Panel</a>
+                        </header>
+                        <div class="detail-grid">
+                            <div class="detail-item"><strong>Insumo:</strong><p>${detalle.insumo_descripcion}</p></div>
+                            <div class="detail-item"><strong>Cantidad Solicitada:</strong><p>${detalle.cantidad_solicitada}</p></div>
+                            <div class="detail-item"><strong>Urgencia:</strong><p>${detalle.tipo_urgencia}</p></div>
+                            <div class="detail-item"><strong>Solicitado por:</strong><p>${detalle.usuario_nombre}</p></div>
+                            <div class="detail-item"><strong>Fecha de Solicitud:</strong><p>${new Date(detalle.fecha_solicitud).toLocaleString()}</p></div>
+                            <div class="detail-item"><strong>Estado Actual:</strong><p id="estado-actual">${detalle.estado}</p></div>
+                        </div>
+                        <hr>
+                        <div class="management-section">
+                            <h2>Gestionar Solicitud</h2>
+                            <form id="management-form">
+                                <div class="form-grid">
+                                    <div class="input-group">
+                                        <label for="orden_compra">Orden de Compra</label>
+                                        <input type="text" id="orden_compra" name="orden_compra" value="${detalle.orden_compra || ''}">
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="proveedor">Proveedor</label>
+                                        <input type="text" id="proveedor" name="proveedor" value="${detalle.proveedor || ''}">
+                                    </div>
+                                    <div class="input-group full-width">
+                                        <label for="notas_internas">Notas Internas</label>
+                                        <textarea id="notas_internas" name="notas_internas">${detalle.notas_internas || ''}</textarea>
+                                    </div>
+                                    <div class="input-group">
+                                        <label for="estado">Cambiar Estado</label>
+                                        <select id="estado" name="estado">
+                                            <option value="Solicitado" ${detalle.estado === 'Solicitado' ? 'selected' : ''}>Solicitado</option>
+                                            <option value="Comprado" ${detalle.estado === 'Comprado' ? 'selected' : ''}>Comprado</option>
+                                            <option value="Enviado" ${detalle.estado === 'Enviado' ? 'selected' : ''}>Enviado</option>
+                                            <option value="Recibido" ${detalle.estado === 'Recibido' ? 'selected' : ''}>Recibido</option>
+                                            <option value="Agotado" ${detalle.estado === 'Agotado' ? 'selected' : ''}>Agotado</option>
+                                        </select>
+                                    </div>
                                 </div>
-                                <div class="input-group">
-                                    <label for="proveedor">Proveedor</label>
-                                    <input type="text" id="proveedor" name="proveedor" value="${detalle.proveedor || ''}">
-                                </div>
-                                <div class="input-group full-width">
-                                    <label for="notas_internas">Notas Internas</label>
-                                    <textarea id="notas_internas" name="notas_internas">${detalle.notas_internas || ''}</textarea>
-                                </div>
-                                <div class="input-group">
-                                    <label for="estado">Cambiar Estado</label>
-                                    <select id="estado" name="estado">
-                                        <option value="Solicitado" ${detalle.estado === 'Solicitado' ? 'selected' : ''}>Solicitado</option>
-                                        <option value="Comprado" ${detalle.estado === 'Comprado' ? 'selected' : ''}>Comprado</option>
-                                        <option value="Enviado" ${detalle.estado === 'Enviado' ? 'selected' : ''}>Enviado</option>
-                                        <option value="Recibido" ${detalle.estado === 'Recibido' ? 'selected' : ''}>Recibido</option>
-                                        <option value="Agotado" ${detalle.estado === 'Agotado' ? 'selected' : ''}>Agotado</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <button type="submit" class="submit-button">Guardar Cambios</button>
-                        </form>
-                    </div>
-                `;
-
-                document.getElementById('management-form').addEventListener('submit', handleUpdate);
-
+                                <button type="submit" class="submit-button">Guardar Cambios</button>
+                            </form>
+                        </div>
+                    `;
+                    document.getElementById('management-form').addEventListener('submit', handleUpdate);
+                } else {
+                    // Si la respuesta no es JSON, es una página de error
+                    throw new Error("El servidor no respondió correctamente. Puede que esté caído o la URL sea incorrecta.");
+                }
             } catch (error) {
                 console.error('Error:', error);
                 container.innerHTML = `<h1>Error al cargar</h1><p>${error.message}</p>`;
