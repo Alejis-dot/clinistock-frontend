@@ -70,6 +70,10 @@
                         <div class="detail-item"><strong>Orden de Compra:</strong><p>${detalle.orden_compra || 'No asignada'}</p></div>
                         <div class="detail-item"><strong>Proveedor:</strong><p>${detalle.proveedor || 'No asignado'}</p></div>
                         <div class="detail-item"><strong>Notas de Compras:</strong><p>${detalle.notas_internas || 'Sin notas'}</p></div>
+                        <div class="detail-item">
+                            <strong>Última Actualización:</strong>
+                            <p>${detalle.fecha_actualizacion ? new Date(detalle.fecha_actualizacion).toLocaleString() : 'N/A'}</p>
+                        </div>
                     </div>
                 `;
             } catch (error) {
@@ -92,7 +96,6 @@
                 } else {
                     solicitudes.forEach(solicitud => {
                         const tr = document.createElement('tr');
-                        // Hacemos la fila clickeable para mostrar detalles
                         tr.style.cursor = 'pointer';
                         tr.onclick = () => showRequestDetails(solicitud.id);
 
@@ -113,7 +116,7 @@
 
         window.onload = function() {
             if (!userId) {
-                window.location.href = 'index.html'; // Si no hay usuario, redirige al login
+                window.location.href = 'index.html';
             } else {
                 cargarMisSolicitudes();
             }
